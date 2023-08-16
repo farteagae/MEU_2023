@@ -16,20 +16,17 @@ Para el primer ejercicio, decidí trabajar con los datos del STPB (Sistema de tr
 En base al *dataset*, se pretende identificar ¿cuales son las cinco estaciones de origen mas utilizadas en el horario pico de la mañana y de la tarde durante las primeras quincenas de febrero y marzo?
 
 
-##**1** Preparación espacio de trabajo
+## **1** Preparación espacio de trabajo
 
 Para dar inicio al TP, se procede a instalar los *packages* y *librerías* necesarias para operar sobre la base de datos. 
 
-```{r}
-install.packages("tidyverse")
-```
 
 ```{r}
 library("tidyverse")
 ```
 
 
-##**2** Explorar la informacion disponible del dataset
+## **2** Explorar la informacion disponible del dataset
 
 
 ```{r}
@@ -73,7 +70,7 @@ Podemos detectar algunos detalles:
 - El viaje promedio fue de 2180 metros o 2,18 Km.
 - El viaje más extenso fue de 14462 metros o 14,5 Km. aprox.
 
-##**3**. En base al análisis general decidi ahondar más en las 10 Estaciones de origen más usadas en el periodo de estudio:
+## **3**. En base al análisis general decidi ahondar más en las 10 Estaciones de origen más usadas en el periodo de estudio:
 
 ```{r}
 summary(recorridos_bicicletas_feb21_mar21$nombre_estacion_origen,11)
@@ -108,7 +105,7 @@ summary(recorridos_bicicletas_feb21_mar21$nombre_estacion_destino,11)
 De ambos rankings se podría determinar que las estaciones más usadas durante Febrero y la primera quincena de Marzo fueron la de Pacífico, Parque Centenario y Godoy Cruz y Libertador sin importar el orden. Estas tres casualmente relacionadas por la proximidad a espacios recreativos aunque la de Pacífico puede tener un vinculo de intermodalidad.
 
 
-##**4**. A continuación voy a desarrollar una serie de funciones para profundizar el análisis de la base de datos de O-D.
+## **4**. A continuación voy a desarrollar una serie de funciones para profundizar el análisis de la base de datos de O-D.
 
 Procedo a filtrar los horarios de origen correspondientes a las horas pico de la mañana (8 a 10) y de la tarde (16 a 18). Se tuvieron en cuenta los viajes cuyos horarios se iniciaron dentro de los intervalos de horas pico, de lunes a viernes. También se excluyo la segunda quincena de febrero a fin de poder comparar solamente las primeras de febrero y marzo. 
 
