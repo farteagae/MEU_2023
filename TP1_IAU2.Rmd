@@ -1,0 +1,137 @@
+---
+title: "TP1_IAU2"
+author: "Felipe Arteaga"
+date: "2023-08-8"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+## **TRABAJO PRÁCTICO 1**
+### Instrumentos de Analisis Urbano II
+
+
+Para el primer ejercicio, decidí trabajar con los datos del STPB (Sistema de transporte público de bicicletas) de Buenos Aires, conocido popularmente como **Ecobici**, la que contiene información disponible de los recorridos en bicicleta de Febrero y Marzo del 2021. 
+En base al *dataset*, se pretende identificar ¿cuales son las cinco estaciones de origen mas utilizadas en el horario pico de la mañana y de la tarde durante las primeras quincenas de febrero y marzo?
+
+
+##**1** Preparación espacio de trabajo
+
+Para dar inicio al TP, se procede a instalar los *packages* y *librerías* necesarias para operar sobre la base de datos. 
+
+```{r}
+install.packages("tidyverse")
+```
+
+```{r}
+library("tidyverse")
+```
+
+
+##**2** Explorar la informacion disponible del dataset
+
+
+```{r}
+recorridos_bicicletas_feb21_mar21<-read.csv("data/recorridos_bicicletas_febrero21_marzo21.csv",stringsAsFactors = TRUE,encoding="UTF-8")
+```
+
+El dataset cuenta con **371075 registros, observaciones o filas** distribuidas en **23 campos o columnas**.
+.
+```{r}
+dim(recorridos_bicicletas_feb21_mar21)
+```
+Podemos saber los nombres de las 23 columnas como se puede ver en el siguiente paso:
+
+```{r}
+names(recorridos_bicicletas_feb21_mar21)
+```
+Cuentan con información importante para poder determinar los recorridos y a futuro poder mapear la información como la que se puede ver a continuación de forma resumida:
+
+- ID de la observación,
+- ID del usuario,
+- Fecha y hora de viaje O-D,
+- Nombre de las estaciones O-D,
+- Ubicación (dirección física y datos georreferenciales como latitud y longitud),
+- Distancia lineal recta del recorrido.
+
+Podemos ver en la siguiente tabla una muestra de los primeras 5 observaciones del dataset:
+
+```{r}
+head(recorridos_bicicletas_feb21_mar21,5)
+```
+Decidi realizar un resumen estadístico de la información como se puede ver:
+
+```{r}
+summary(recorridos_bicicletas_feb21_mar21)
+```
+Podemos detectar algunos detalles: 
+
+- Los datos son del mes de febrero y de la primera quincena de marzo.
+- La fuente de todas las observaciones es <https://data.buenosaires.gob.ar>
+- En la primera quincena de Febrero se realizaron más viajes que en la de Marzo.
+- El viaje promedio fue de 2180 metros o 2,18 Km.
+- El viaje más extenso fue de 14462 metros o 14,5 Km. aprox.
+
+##**3**. En base al análisis general decidi ahondar más en las 10 Estaciones de origen más usadas en el periodo de estudio:
+
+```{r}
+summary(recorridos_bicicletas_feb21_mar21$nombre_estacion_origen,11)
+```
+1. <span style="color:red">**Pacífico**</span>
+2. <span style="color:red">**Parque Centenario**</span>
+3. <span style="color:red">**Godoy Cruz y Libertador**</span>
+4. Barrancas de Belgrano
+5. Plaza Bolivia
+6. Carlos Gardel
+7. Plaza Italia
+8. Congreso
+9. Yatay
+10. Instituto  Leloir
+
+Por otro lado, las 10 Estaciones de destino más utilizadas fueron:
+
+```{r}
+summary(recorridos_bicicletas_feb21_mar21$nombre_estacion_destino,11)
+```
+1. <span style="color:red">**Godoy Cruz y Libertador**</span>
+2. <span style="color:red">**Parque Centenario**</span>
+3. <span style="color:red">**Pacífico**</span>
+4. Barrancas de Belgrano
+5. Plaza Bolivia
+6. Carlos Gardel
+7. Congreso
+8. Constitución
+9. Yatay 
+10. Parque Las Heras
+
+De ambos rankings se podría determinar que las estaciones más usadas durante Febrero y la primera quincena de Marzo fueron la de Pacífico, Parque Centenario y Godoy Cruz y Libertador sin importar el orden. Estas tres casualmente relacionadas por la proximidad a espacios recreativos aunque la de Pacífico puede tener un vinculo de intermodalidad.
+
+
+##**4**. A continuación voy a desarrollar una serie de funciones para profundizar el análisis de la base de datos de O-D.
+
+Procedo a filtrar los horarios de origen correspondientes a las horas pico de la mañana (8 a 10) y de la tarde (16 a 18). Se tuvieron en cuenta los viajes cuyos horarios se iniciaron dentro de los intervalos de horas pico, de lunes a viernes. También se excluyo la segunda quincena de febrero a fin de poder comparar solamente las primeras de febrero y marzo. 
+
+```{r}
+filtro_pico_am_pm <- filter(recorridos_bicicletas_feb21_mar21, hora_origen %in% c("8", "9", "16", "17")& quincena_origen!="2º Quincena Febrero" & !(dia_origen%in%c("Saturday", "Sunday")))
+```
+
+```{r}
+summary(filtro_pico_am_pm)
+```
+
+
+Finalmente, podemos ver que las primeras cinco estaciones de origen mas utilizadas en el horario pico de la mañana y de la tarde durante las primeras quincenas de febrero y marzo fueron las siguientes: 
+
+
+1. <span style="color:red">**Parque Centenario**</span>
+2. <span style="color:red">**Pacifico**</span>
+3. <span style="color:red">**Congreso**</span>
+4. Carlos Gardel
+5. Constitución
+
+
+
+
+
+
